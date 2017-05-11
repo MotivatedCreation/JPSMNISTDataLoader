@@ -84,11 +84,6 @@ public class JPSMNISTDataLoader: JPSBinaryDataLoader
         return(labels, images)
     }
     
-    public func normalizePixel(_ value: MNISTPixel)
-    {
-        return
-    }
-    
     public func pixels(forImageData imageData: NSData) -> MNISTImage {
         return JPSMNISTDataLoader.pixels(forImageData: imageData)
     }
