@@ -7,15 +7,11 @@ import Foundation
 
 public class JPSBinaryDataLoader
 {
-<<<<<<< HEAD
     enum JPSBinaryDataLoaderError : Error {
         case RuntimeError(String)
     }
     
     public class func inputStream(forResource resource: String, ofType type: String) throws -> InputStream
-=======
-    public class func inputStream(forResource resource: String, ofType type: String) -> InputStream
->>>>>>> 7b28c9143b658c5d5fc1a753ac0d2c7b894194ed
     {
         let resourcePath = Bundle.main.path(forResource: resource, ofType: type)
         
@@ -26,11 +22,7 @@ public class JPSBinaryDataLoader
         return InputStream(fileAtPath: path)!
     }
     
-<<<<<<< HEAD
     public class func data(forInputStream inputStream: InputStream, bufferSize: Int) -> Data
-=======
-    public class func data(forInputStream inputStream: InputStream, bufferSize: Int) -> NSData
->>>>>>> 7b28c9143b658c5d5fc1a753ac0d2c7b894194ed
     {
         var buffer = [UInt8](repeating: 0, count: bufferSize)
         
@@ -53,11 +45,7 @@ public class JPSBinaryDataLoader
         return (data as! Data)
     }
     
-<<<<<<< HEAD
     public class func data(forResource resource: String, ofType type: String, bufferSize: Int) throws -> Data
-=======
-    public class func data(forResource resource: String, ofType type: String, bufferSize: Int) -> NSData
->>>>>>> 7b28c9143b658c5d5fc1a753ac0d2c7b894194ed
     {
         let inputStream = try JPSBinaryDataLoader.inputStream(forResource: resource, ofType: type)
         
@@ -71,11 +59,7 @@ public class JPSBinaryDataLoader
         return data
     }
     
-<<<<<<< HEAD
     public class func load(resource: String, ofType type: String, bufferSize: Int, numberOfItems: Int, dataOffset: Int, dataSize: Int) throws -> [Data]
-=======
-    public class func load(resource: String, ofType type: String, bufferSize: Int, numberOfItems: Int, dataOffset: Int, dataSize: Int) -> [Data]
->>>>>>> 7b28c9143b658c5d5fc1a753ac0d2c7b894194ed
     {
         let data = try JPSBinaryDataLoader.data(forResource: resource, ofType: type, bufferSize: bufferSize)
         

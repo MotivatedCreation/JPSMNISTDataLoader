@@ -46,13 +46,13 @@ public class JPSMNISTDataLoader: JPSBinaryDataLoader
         return mnistImage
     }
     
-    private class func loadTrainingData(numberOfItemsOffset: Int, labelOffset: Int, labelSize: Int, imageOffset: Int, imageSize: Int) throws -> (labels: [MNISTLabel], images: [MNISTImage])
+    private class func loadData(filePrefix: String, numberOfItemsOffset: Int, labelOffset: Int, labelSize: Int, imageOffset: Int, imageSize: Int) throws -> (labels: [MNISTLabel], images: [MNISTImage])
     {
         let bufferSize = 16384
         
-        let labelData = (try JPSBinaryDataLoader.data(forResource: "train-labels", ofType: "idx1-ubyte", bufferSize: bufferSize) as NSData)
+        let labelData = (try JPSBinaryDataLoader.data(forResource: "\(filePrefix)-labels", ofType: "idx1-ubyte", bufferSize: bufferSize) as NSData)
         
-        let imageData = (try JPSBinaryDataLoader.data(forResource: "train-images", ofType: "idx3-ubyte", bufferSize: bufferSize) as NSData)
+        let imageData = (try JPSBinaryDataLoader.data(forResource: "\(filePrefix)-images", ofType: "idx3-ubyte", bufferSize: bufferSize) as NSData)
         
         var count: UInt32 = 0
         let dataRange = NSMakeRange(numberOfItemsOffset, labelOffset)
@@ -63,7 +63,7 @@ public class JPSMNISTDataLoader: JPSBinaryDataLoader
         var labels = [MNISTLabel]()
         var images = [MNISTImage]()
         
-        for location in 0..<(numberOfLabels)
+        for location in 0..<numberOfLabels
         {
             let labelDataRange = NSMakeRange(labelOffset + (labelSize * Int(location)), labelSize)
             let imagePixelDataRange = NSMakeRange(imageOffset + (imageSize * Int(location)), imageSize)
@@ -81,15 +81,22 @@ public class JPSMNISTDataLoader: JPSBinaryDataLoader
             images.append(imagePixels)
         }
         
-        return(labels, images)
+        return (labels, images)
     }
     
-    public func pixels(forImageData imageData: NSData) -> MNISTImage {
-        return JPSMNISTDataLoader.pixels(forImageData: imageData)
+    private class func loadTestingData(numberOfItemsOffset: Int, labelOffset: Int, labelSize: Int, imageOffset: Int, imageSize: Int) throws -> (labels: [MNISTLabel], images: [MNISTImage]) {
+        return (try JPSMNISTDataLoader.loadData(filePrefix: "t10k", numberOfItemsOffset: numberOfItemsOffset, labelOffset: labelOffset, labelSize: labelSize, imageOffset: imageOffset, imageSize: imageSize))
     }
     
-    public func loadTrainingData() throws -> (labels: [MNISTLabel], images: [MNISTImage])
-    {
+    private class func loadTrainingData(numberOfItemsOffset: Int, labelOffset: Int, labelSize: Int, imageOffset: Int, imageSize: Int) throws -> (labels: [MNISTLabel], images: [MNISTImage]) {
+        return (try JPSMNISTDataLoader.loadData(filePrefix: "train", numberOfItemsOffset: numberOfItemsOffset, labelOffset: labelOffset, labelSize: labelSize, imageOffset: imageOffset, imageSize: imageSize))
+    }
+    
+    public func loadTestingData() throws -> (labels: [MNISTLabel], images: [MNISTImage]) {
+        return try JPSMNISTDataLoader.loadTestingData(numberOfItemsOffset: self.numberOfItemsOffset, labelOffset: self.labelOffset, labelSize: self.labelSize, imageOffset: self.imageOffset, imageSize: self.imageSize)
+    }
+    
+    public func loadTrainingData() throws -> (labels: [MNISTLabel], images: [MNISTImage]) {
         return try JPSMNISTDataLoader.loadTrainingData(numberOfItemsOffset: self.numberOfItemsOffset, labelOffset: self.labelOffset, labelSize: self.labelSize, imageOffset: self.imageOffset, imageSize: self.imageSize)
     }
 }
